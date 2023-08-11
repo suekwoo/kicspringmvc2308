@@ -5,29 +5,25 @@ import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kic.mskim.MsInterceptor;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-public class LoginAdmin implements MsInterceptor {
+
+
+public class LoginAdmin extends HandlerInterceptorAdapter {
 
 	@Override
-	public String loginCheck(HttpServletRequest request, HttpServletResponse arg1) {
-
-		System.out.println("admin");
-		try {
-			request.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		String login = (String) request.getSession().getAttribute("id");
-		request.setAttribute("msg", "접근 불가 합니다");
-		request.setAttribute("url", "/member/loginForm");
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
 		
+		String login = (String) request.getSession().getAttribute("id");
+			
 		if (login == null || !login.equals("admin")) {
-			return "alert";
+			response.sendRedirect(request.getContextPath()+"/member/alert?id=admin");
+			return false;
 		} else {
-			return null;
+			return true;
 		}
-
 	}
+		
 
 }

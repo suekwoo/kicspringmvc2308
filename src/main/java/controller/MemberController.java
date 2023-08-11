@@ -44,8 +44,7 @@ public class MemberController {
 	}
 	
 	    @RequestMapping("index")  // /member/index
-		public String  index(HttpServletRequest request, 
-				HttpServletResponse response) {
+		public String  index() {
 			request.setAttribute("index", "member 입니다");
 			// /view/member/index.jsp
 			return "index";
@@ -58,33 +57,14 @@ public class MemberController {
 			return "member/joinForm";
 		}
 	    @RequestMapping("loginForm") //  /member/joinForm
-		public String  loginForm(HttpServletRequest request, 
-				HttpServletResponse response) {
+		public String  loginForm() {
 			
 			return "member/loginForm";
 		}
 	    
 	    @RequestMapping("joinPro") //  /member/joinForm
-		public String  joinPro(HttpServletRequest request, 
-				HttpServletResponse response) {
-	    	try {
-				request.setCharacterEncoding("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    	Member mem = new Member();
-	    	mem.setId(request.getParameter("id"));
-	    	mem.setPass(request.getParameter("pass"));
-	    	mem.setName(request.getParameter("name"));
-	    	mem.setGender(Integer.parseInt(request.getParameter("gender")));
-	    	mem.setTel(request.getParameter("tel"));
-	    	mem.setEmail(request.getParameter("email"));
-	    	
-	    	mem.setPicture(request.getParameter("picture"));
-
-	    	
-	    	int num = md.insertMember(mem);
+		public String  joinPro(Member mem) {
+	     	int num = md.insertMember(mem);
 	    	String msg = "";
 	    	String url = "";
 	    	if (num > 0) {
@@ -103,13 +83,8 @@ public class MemberController {
 		
 	    
 	    @RequestMapping("loginPro") //  /member/joinForm
-		public String  loginPro(HttpServletRequest request, 
-				HttpServletResponse response) {
-	    	
-	    	String id = request.getParameter("id");
-	    	String pass = request.getParameter("pass");
-
-	    	
+		public String  loginPro(String id, String pass) {
+	     	
 	    	Member mem = md.oneMember(id); 
 	    	String msg = "";
 	    	String url = "";
@@ -133,9 +108,8 @@ public class MemberController {
 	    
 	    
 	    @RequestMapping("logout") //  /member/joinForm
-		public String  logout(HttpServletRequest request, 
-				HttpServletResponse response) {
-	    	HttpSession session = request.getSession();
+		public String  logout() {
+	    	
 	    	String login = (String)session.getAttribute("id");
 	    	session.invalidate();
 	    	String msg = login + "님이 로그아웃 되었습니다";
@@ -148,9 +122,8 @@ public class MemberController {
 	  
 	    @RequestMapping("memberInfo") //  /member/joinForm
 	 
-		public String  memberInfo(HttpServletRequest request, 
-				HttpServletResponse response) {
-	    	HttpSession session = request.getSession();
+		public String  memberInfo() {
+	    	
 	    	String id = (String)session.getAttribute("id");
 	    	Member m = md.oneMember(id);
 	    	
@@ -164,9 +137,8 @@ public class MemberController {
 	    
 	    @RequestMapping("memberUpdateForm") 
 	   
-		public String  memberUpdateForm(HttpServletRequest request, 
-				HttpServletResponse response) {
-	    	HttpSession session = request.getSession();
+		public String  memberUpdateForm() {
+	    	
 	    	String id = (String)session.getAttribute("id");
 	    	Member m = md.oneMember(id);
 	    	
@@ -175,25 +147,12 @@ public class MemberController {
 		}
 	    
 	    @RequestMapping("memberUpdatePro")
-		public String  memberUpdatePro(HttpServletRequest request, 
-				HttpServletResponse response) {
-	    	try {
-				request.setCharacterEncoding("utf-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();			}
-	    	HttpSession session = request.getSession();
+		public String  memberUpdatePro(Member newm) {
+	    	
+	    
 	    	String id = (String) session.getAttribute("id");
 	    	String msg="로그인이 필요합니다";    	String url="member/loginForm";
-	    		Member newm = new Member();
-	    		newm.setId(id);
-	    		newm.setPass(request.getParameter("pass"));
-	    		newm.setName(request.getParameter("name"));
-	    		newm.setGender(Integer.parseInt(request.getParameter("gender")));
-	    		newm.setTel(request.getParameter("tel"));
-	    		newm.setEmail(request.getParameter("email"));
-	    		newm.setPicture(request.getParameter("picture"));
-	    	
+	    		
 	    		Member  dbm = md.oneMember(id);  //password 확인
 	    		
 	    		
@@ -230,8 +189,7 @@ public class MemberController {
 	    
 	    @RequestMapping("memberPassForm") 
 	 
-		public String  memberPassForm(HttpServletRequest request, 
-				HttpServletResponse response) { 	 	
+		public String  memberPassForm() { 	 	
 	    	
 			return "member/memberPassForm";
 		}
@@ -239,15 +197,13 @@ public class MemberController {
 	    
 	    @RequestMapping("memberPassPro")
 	  
-		public String  memberPassPro(HttpServletRequest request, 
-				HttpServletResponse response) {
-	    	HttpSession session = request.getSession();
+		public String  memberPassPro(String pass, String chgpass1) {
+	    	
 	    	String id = (String) session.getAttribute("id");
 	    	String msg="로그인이 필요합니다";    	String url="loginForm.jsp";
 	    	
 	    		Member  dbm = md.oneMember(id);  //password 확인
-	    		String pass  = request.getParameter("pass"); 
-	    		String chgpass1  = request.getParameter("chgpass1"); 
+	    		
 	    		if (dbm!=null) {
 	    			if (dbm.getPass().equals(pass)) {
 	    				int num = md.changePass(id, chgpass1); 
@@ -268,8 +224,7 @@ public class MemberController {
 	    
 	    @RequestMapping("memberDeleteForm") 
 	 
-		public String  memberDeleteForm(HttpServletRequest request, 
-				HttpServletResponse response) {
+		public String  memberDeleteForm() {
 	    	 	
 	    	
 			return "member/memberDeleteForm";
@@ -277,9 +232,8 @@ public class MemberController {
 	    
 	    @RequestMapping("memberDeletePro")
 	   
-		public String  memberDeletePro(HttpServletRequest request, 
-				HttpServletResponse response) {
-	    	HttpSession session = request.getSession();
+		public String  memberDeletePro() {
+	    	
 	    	String id = (String) session.getAttribute("id");
 	    	String msg="로그인이 필요합니다";   	String url="member/loginForm";
 	    
@@ -304,8 +258,7 @@ public class MemberController {
 		} 
 	    
 	    @RequestMapping("pictureimgForm")
-	    public String  pictureimgForm(HttpServletRequest request, 
-				HttpServletResponse response) {
+	    public String  pictureimgForm() {
 	    	 	
 	    	
 			return "member/pictureimgForm";
@@ -342,22 +295,29 @@ public class MemberController {
 	    
 	    @RequestMapping("memberList") 
 	   
-	    public String  memberList(HttpServletRequest request, 
-				HttpServletResponse response) {
-	    	 String id = (String) request.getSession().getAttribute("id"); 	
+	    public String  memberList() {
+	    	 String id = (String) session.getAttribute("id"); 	
 	    	 List<Member>  li = md.memberList();  	
 	    	 request.setAttribute("li", li);
 			return "member/memberList";
 		}
 	    
 	    
+	    @RequestMapping("alert") 
+	    public String  alert(String id) {
+	    	if (id.equals("admin")) {
+	    		m.addAttribute("msg", "접근 불가 합니다");
+	    	} else {
+	    		m.addAttribute("msg", "로그인 하세요");
+	    	}
+	    	
+	    	m.addAttribute("url", "member/loginForm");
+	    	
+			return "alert";
+		}    
 	    
 	    
-	    
-	    
-	    
-	    
-	    
+	
 	    
 	    
 	    

@@ -128,21 +128,25 @@ Component-scan과의 차이점은 이 설정은 Bean을 등록하는 작업을 �
 
 
 
-<!-- 
+
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/acl/**" />
-			<bean class="service.AdminInterceptor" />
+			<mvc:mapping path="/member/memberList" />
+			<bean class="login.LoginAdmin" />
 		</mvc:interceptor>
-		<bean class="service.MeasuringInterceptor" /> 
 		<mvc:interceptor>
-			<mvc:mapping path="/members/m2" />
-			<mvc:mapping path="/files/**" />
+			<mvc:mapping path="/member/memberInfo" />
+			<mvc:mapping path="/member/memberUpdateForm" />
+			<mvc:mapping path="/member/memberUpdatePro" />
+			<mvc:mapping path="/member/memberPassForm" />
+			<mvc:mapping path="/member/memberPassPro" />
+			<mvc:mapping path="/member/memberDeleteForm" />
+			<mvc:mapping path="/member/memberDeletePro" />
 			<ref bean="login" />
 		</mvc:interceptor>
 	</mvc:interceptors>
-	<bean id="login" class="service.LoginInterceptor" />
-	 -->
+	<bean id="login" class="login.LoginUser" />
+	
 	
 	
   
