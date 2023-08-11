@@ -1,0 +1,49 @@
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+	version="4.0" metadata-complete="true">
+	<display-name>Archetype Created Web Application</display-name>
+
+<!-- sitemesh3  프레임워크 관련 설정
+ 	1) WEB-INF/web.xml copy  :jspPro project
+ 	2) WEB-INF/lib/sitemesh-3.0.1.jar
+ 	3) WEB-INF/sitemesh3.xml
+ 	 -->
+	<filter>
+		<filter-name>sitemesh</filter-name>
+	<filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>sitemesh</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+
+     <servlet>
+		<servlet-name>kicspringmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>kicspringmvc</servlet-name>
+		<url-pattern>/</url-pattern> 
+	</servlet-mapping> 
+	
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+
+</web-app>

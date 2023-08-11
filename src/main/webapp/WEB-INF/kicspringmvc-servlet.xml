@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<mvc:annotation-driven />
+<!-- 	
+Spring MVC 컴포넌트들을 디폴트 설정을 통해 활성화한다.
+Spring MVC @Controller에 요청을 보내기 위해 필요한 
+HandlerMapping과 HandlerAdapter를 Bean으로 등록한다.
+
+HandlerMapping : HTTP 요청정보를 이용해서 컨트롤러를 찾아주는 기능
+HandlerAdapter : HandlerMapping을 통해 찾은 컨트롤러를 직접 실행하는 기능을 수행
+Bean을 생성하기 위해 xml 파일에 
+context:component-scan을 명시하면 이 태그를 포함하지 않아도 MVC 어플리케이션을 작동한다.
+	 -->
+	 <!-- css,js,html 웹에서 제공되는 파일의 기본 기능 제외 -->
+	<mvc:default-servlet-handler />  
+	
+	<context:component-scan
+		base-package="controller, service" />
+<!-- 		
+특정 패키지 내의 클래스를 스캔하고 Annotation
+(@Component @Controller @Service @Repository)을 확인한 후 Bean 인스턴스로 생성한다.
+이를 이용하면 @Autowired와 @Qualifier Annotation을 인식할 수 있다.
+context:component-scan을 선언했다면 
+context:annotation-config를 선언할 필요가 없다.	 -->
+		
+		
+		
+	<context:annotation-config /> 
+	
+<!-- 	
+ApplicationContext 안에 이미 등록된 Bean들의 Annotation을 활성화하기 위해 사용된다.
+Component-scan과의 차이점은 이 설정은 Bean을 등록하는 작업을 수행하지 않는다는 것이다.	
+	 -->
+	
+	
+	
+	
+	
+	
+	<mvc:view-controller path="/index"
+		view-name="index" />
+		
+		
+		
+		
+   <mvc:resources mapping="/view/board/images/**" 
+          location="/WEB-INF/view/board/images/" /> 
+    
+    <mvc:resources mapping="/view/member/picture/**" 
+          location="/WEB-INF/view/member/picture/" /> 
+    
+          
+  <!--   
+    mapping은 url=project명/view/board/images/aaa.png가 들어오면 
+    location에 있는 파일을 연결하라는 의미임     -->
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+          
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/view/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	
+ <bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass">
+			<value>oracle.jdbc.OracleDriver</value>
+		</property>
+		<property name="jdbcUrl">
+			<value>jdbc:oracle:thin:@localhost:1521:xe</value>
+		</property>
+		<property name="user">
+			<value>kic</value>
+		</property>
+		<property name="password">
+			<value>1111</value>
+		</property>
+		<property name="maxPoolSize">
+			<value>20</value>
+		</property><!-- 최대 연결 객체 갯수 -->
+		<property name="minPoolSize">
+			<value>3</value>
+		</property> <!-- 최소 연결 객체 갯수 -->
+		<property name="initialPoolSize">
+			<value>5</value>
+		</property> <!-- 초기 연결 객체 갯수 -->
+		<property name="acquireIncrement">
+			<value>5</value>
+		</property> <!-- 연결 객체 증가 갯수 -->
+	</bean>
+	 <!-- database pool 임-->
+
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" /> 
+		<property name="configLocation"
+			value="classpath:mybatis/mybatis-config.xml" />
+		<!-- <property name="mapperLocations" value="classpath:mapper/*.xml"></property> -->
+	</bean>
+	<bean class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+	
+
+
+
+
+
+
+
+
+
+<!-- 
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/acl/**" />
+			<bean class="service.AdminInterceptor" />
+		</mvc:interceptor>
+		<bean class="service.MeasuringInterceptor" /> 
+		<mvc:interceptor>
+			<mvc:mapping path="/members/m2" />
+			<mvc:mapping path="/files/**" />
+			<ref bean="login" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<bean id="login" class="service.LoginInterceptor" />
+	 -->
+	
+	
+  
+   <bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="utf-8" />
+	</bean> 
+	
+	<!-- 
+	upload를 위한 객체임 pom.xml에 
+	commons-fileupload
+	commons-beanutils
+	commons-digester
+	아래 내용을 추가 하여야함 
+ -->
+	
+
+</beans>
